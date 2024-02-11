@@ -37316,6 +37316,78 @@ if (process.env.READABLE_STREAM === 'disable' && Stream) {
 
 /***/ }),
 
+/***/ 1867:
+/***/ ((module, exports, __nccwpck_require__) => {
+
+/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
+/* eslint-disable node/no-deprecated-api */
+var buffer = __nccwpck_require__(4300)
+var Buffer = buffer.Buffer
+
+// alternative to using Object.keys for old browsers
+function copyProps (src, dst) {
+  for (var key in src) {
+    dst[key] = src[key]
+  }
+}
+if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
+  module.exports = buffer
+} else {
+  // Copy properties from require('buffer')
+  copyProps(buffer, exports)
+  exports.Buffer = SafeBuffer
+}
+
+function SafeBuffer (arg, encodingOrOffset, length) {
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.prototype = Object.create(Buffer.prototype)
+
+// Copy static methods from Buffer
+copyProps(Buffer, SafeBuffer)
+
+SafeBuffer.from = function (arg, encodingOrOffset, length) {
+  if (typeof arg === 'number') {
+    throw new TypeError('Argument must not be a number')
+  }
+  return Buffer(arg, encodingOrOffset, length)
+}
+
+SafeBuffer.alloc = function (size, fill, encoding) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  var buf = Buffer(size)
+  if (fill !== undefined) {
+    if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
+    }
+  } else {
+    buf.fill(0)
+  }
+  return buf
+}
+
+SafeBuffer.allocUnsafe = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return Buffer(size)
+}
+
+SafeBuffer.allocUnsafeSlow = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return buffer.SlowBuffer(size)
+}
+
+
+/***/ }),
+
 /***/ 2043:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -40520,7 +40592,7 @@ function coerce (version, options) {
 
 /*<replacement>*/
 
-var Buffer = (__nccwpck_require__(2279).Buffer);
+var Buffer = (__nccwpck_require__(1867).Buffer);
 /*</replacement>*/
 
 var isEncoding = Buffer.isEncoding || function (encoding) {
@@ -40791,78 +40863,6 @@ function simpleWrite(buf) {
 function simpleEnd(buf) {
   return buf && buf.length ? this.write(buf) : '';
 }
-
-/***/ }),
-
-/***/ 2279:
-/***/ ((module, exports, __nccwpck_require__) => {
-
-/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
-/* eslint-disable node/no-deprecated-api */
-var buffer = __nccwpck_require__(4300)
-var Buffer = buffer.Buffer
-
-// alternative to using Object.keys for old browsers
-function copyProps (src, dst) {
-  for (var key in src) {
-    dst[key] = src[key]
-  }
-}
-if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
-  module.exports = buffer
-} else {
-  // Copy properties from require('buffer')
-  copyProps(buffer, exports)
-  exports.Buffer = SafeBuffer
-}
-
-function SafeBuffer (arg, encodingOrOffset, length) {
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.prototype = Object.create(Buffer.prototype)
-
-// Copy static methods from Buffer
-copyProps(Buffer, SafeBuffer)
-
-SafeBuffer.from = function (arg, encodingOrOffset, length) {
-  if (typeof arg === 'number') {
-    throw new TypeError('Argument must not be a number')
-  }
-  return Buffer(arg, encodingOrOffset, length)
-}
-
-SafeBuffer.alloc = function (size, fill, encoding) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  var buf = Buffer(size)
-  if (fill !== undefined) {
-    if (typeof encoding === 'string') {
-      buf.fill(fill, encoding)
-    } else {
-      buf.fill(fill)
-    }
-  } else {
-    buf.fill(0)
-  }
-  return buf
-}
-
-SafeBuffer.allocUnsafe = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return Buffer(size)
-}
-
-SafeBuffer.allocUnsafeSlow = function (size) {
-  if (typeof size !== 'number') {
-    throw new TypeError('Argument must be a number')
-  }
-  return buffer.SlowBuffer(size)
-}
-
 
 /***/ }),
 
@@ -46513,180 +46513,41 @@ module.exports.element = module.exports.Element = element;
 
 /***/ }),
 
-/***/ 5131:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-/** @format */
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const utils = __importStar(__nccwpck_require__(1518));
-const tar_1 = __nccwpck_require__(6490);
-const core = __importStar(__nccwpck_require__(2186));
-const path = __importStar(__nccwpck_require__(1017));
-const utils_1 = __nccwpck_require__(1314);
-process.on("uncaughtException", (e) => core.info("warning: " + e.message));
-function saveCache() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const bucket = core.getInput("bucket", { required: true });
-            const key = core.getInput("key", { required: true });
-            const paths = (0, utils_1.getInputAsArray)("path");
-            core.info(`
-      saveCache
-
-      bucket = ${bucket}
-      key = ${key}
-      paths = ${paths}
-    `);
-            const isCacheHit = (0, utils_1.getCacheHitOutput)(key);
-            core.info(`isCacheHit ${isCacheHit}`);
-            if (isCacheHit) {
-                core.info(`Found cache hit for key ${key}, ignore uploading`);
-                // TODO: return
-            }
-            else {
-                core.info(`Cache not found for key ${key}, start uploading`);
-            }
-            // if (isCacheHit) {
-            //   core.info(`Found cache hit for key ${key}, ignore uploading`)
-            //   return
-            // }
-            try {
-                const mc = (0, utils_1.newMinio)();
-                const compressionMethod = yield utils.getCompressionMethod();
-                core.info(`Compression method ${compressionMethod}`);
-                const cachePaths = yield utils.resolvePaths(paths);
-                core.info(`Cache Paths: ${JSON.stringify(cachePaths)}`);
-                const archiveFolder = yield utils.createTempDirectory();
-                core.info(`archiveFolder: ${archiveFolder}`);
-                const cacheFileName = utils.getCacheFileName(compressionMethod); // cache.tzst
-                core.info(`cacheFileName: ${cacheFileName}`);
-                const archivePath = path.join(archiveFolder, cacheFileName); // /Volumes/MacintoshHD2/actions-runner/_work/_temp/d251b5bc-37a0-44b0-8df1-ad374bb5440a/cache.tzst
-                core.info(`archivePath: ${archivePath}`);
-                yield (0, tar_1.createTar)(archiveFolder, cachePaths, compressionMethod);
-                if (core.isDebug()) {
-                    yield (0, tar_1.listTar)(archivePath, compressionMethod);
-                }
-                const object = path.join(key, cacheFileName);
-                core.info(`Uploading tar to s3. Bucket: ${bucket}, Object: ${object}`);
-                yield mc.fPutObject(bucket, object, archivePath, {});
-                core.info("Cache saved to s3 successfully");
-            }
-            catch (e) {
-                core.info("Save s3 cache failed: " + e.message);
-            }
-        }
-        catch (e) {
-            core.info("warning: " + e.message);
-        }
-    });
-}
-saveCache();
-
-
-/***/ }),
-
 /***/ 1314:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 /** @format */
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.listObjects = exports.findObject = exports.getCacheHitOutput = exports.setCacheHitOutput = exports.formatSize = exports.getInputAsInt = exports.getInputAsArray = exports.getInputAsBoolean = exports.newMinio = void 0;
-const utils = __importStar(__nccwpck_require__(1518));
-const core = __importStar(__nccwpck_require__(2186));
-const minio = __importStar(__nccwpck_require__(8308));
+const cacheUtils_1 = __nccwpck_require__(1518);
+const core_1 = __nccwpck_require__(2186);
+const minio_1 = __nccwpck_require__(8308);
 function newMinio() {
-    return new minio.Client({
-        endPoint: core.getInput("endpoint"),
+    return new minio_1.Client({
+        endPoint: (0, core_1.getInput)("endpoint"),
         port: getInputAsInt("port"),
         useSSL: !getInputAsBoolean("insecure"),
-        accessKey: core.getInput("accessKey"),
-        secretKey: core.getInput("secretKey"),
+        accessKey: (0, core_1.getInput)("accessKey"),
+        secretKey: (0, core_1.getInput)("secretKey"),
     });
 }
 exports.newMinio = newMinio;
 function getInputAsBoolean(name, options) {
-    return core.getInput(name, options) === "true";
+    return (0, core_1.getInput)(name, options) === "true";
 }
 exports.getInputAsBoolean = getInputAsBoolean;
 function getInputAsArray(name, options) {
-    return core
-        .getInput(name, options)
+    return (0, core_1.getInput)(name, options)
         .split("\n")
         .map((s) => s.trim())
         .filter((x) => x !== "");
 }
 exports.getInputAsArray = getInputAsArray;
 function getInputAsInt(name, options) {
-    const value = parseInt(core.getInput(name, options));
-    if (isNaN(value) || value < 0) {
+    const value = parseInt((0, core_1.getInput)(name, options));
+    if (Number.isNaN(value) || value < 0) {
         return undefined;
     }
     return value;
@@ -46697,63 +46558,61 @@ function formatSize(value, format = "bi") {
         return "";
     const [multiple, k, suffix] = (format === "bi" ? [1000, "k", "B"] : [1024, "K", "iB"]);
     const exp = (Math.log(value) / Math.log(multiple)) | 0;
-    const size = Number((value / Math.pow(multiple, exp)).toFixed(2));
+    const size = Number((value / multiple ** exp).toFixed(2));
     return (size +
-        (exp ? (k + "MGTPEZY")[exp - 1] + suffix : "byte" + (size !== 1 ? "s" : "")));
+        (exp ? `${k}MGTPEZY`[exp - 1] + suffix : `byte${size !== 1 ? "s" : ""}`));
 }
 exports.formatSize = formatSize;
 function setCacheHitOutput(key, isCacheHit) {
-    core.setOutput("cache-hit", isCacheHit.toString());
+    (0, core_1.setOutput)("cache-hit", isCacheHit.toString());
     if (isCacheHit) {
-        core.saveState(`cache-hit-${key}`, isCacheHit);
+        (0, core_1.saveState)(`cache-hit-${key}`, isCacheHit);
     }
 }
 exports.setCacheHitOutput = setCacheHitOutput;
 function getCacheHitOutput(key) {
-    const state = core.getState(`cache-hit-${key}`);
-    core.debug(`state for key ${key} = ${state}`);
+    const state = (0, core_1.getState)(`cache-hit-${key}`);
+    (0, core_1.debug)(`state for key ${key} = ${state}`);
     return !!(state === "true");
 }
 exports.getCacheHitOutput = getCacheHitOutput;
-function findObject(mc, bucket, key, compressionMethod) {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.info(`Try find object with prefix: ${key}`);
-        const cacheFileName = utils.getCacheFileName(compressionMethod);
-        let objects = yield listObjects(mc, bucket);
-        core.debug(`fn ${cacheFileName}`);
-        core.debug(`Objects, ${JSON.stringify(objects, null, "  ")}`);
-        objects = objects.filter((o) => {
-            const isIncludes = o.name.includes(key);
-            core.debug(`objects.filter ${o.name} includes ${key} ? = ${isIncludes}`);
-            return isIncludes;
-        });
-        core.info(`Found ${JSON.stringify(objects, null, 2)}`);
-        const sorted = objects.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
-        if (sorted.length > 0) {
-            core.info(`Using latest ${JSON.stringify(sorted[0])}`);
-            return sorted[0];
-        }
-        throw new Error("Cache item not found");
+async function findObject(mc, bucket, key, compressionMethod) {
+    (0, core_1.info)(`Try find object with prefix: ${key}`);
+    const cacheFileName = (0, cacheUtils_1.getCacheFileName)(compressionMethod);
+    let objects = await listObjects(mc, bucket);
+    (0, core_1.debug)(`fn ${cacheFileName}`);
+    (0, core_1.debug)(`Objects, ${JSON.stringify(objects, null, "  ")}`);
+    objects = objects.filter((o) => {
+        const isIncludes = o.name.includes(key);
+        (0, core_1.debug)(`objects.filter ${o.name} includes ${key} ? = ${isIncludes}`);
+        return isIncludes;
     });
+    (0, core_1.info)(`Found ${JSON.stringify(objects, null, 2)}`);
+    const sorted = objects.sort((a, b) => b.lastModified.getTime() - a.lastModified.getTime());
+    if (sorted.length > 0) {
+        (0, core_1.info)(`Using latest ${JSON.stringify(sorted[0])}`);
+        return sorted[0];
+    }
+    throw new Error("Cache item not found");
 }
 exports.findObject = findObject;
 function listObjects(mc, bucket) {
     return new Promise((resolve, reject) => {
-        core.info(`Try find objects in bucket ${bucket}`);
+        (0, core_1.info)(`Try find objects in bucket ${bucket}`);
         const buckets = mc.listObjectsV2(bucket, undefined, true);
         const findedItems = [];
         let resolved = false;
         buckets.on("data", (obj) => {
-            core.debug(`Buckets data ${JSON.stringify(obj)}`);
+            (0, core_1.debug)(`Buckets data ${JSON.stringify(obj)}`);
             findedItems.push(obj);
         });
         buckets.on("error", (e) => {
-            core.error(`Buckets error ${JSON.stringify(e)}`);
+            (0, core_1.error)(`Buckets error ${JSON.stringify(e)}`);
             resolved = true;
             reject(e);
         });
         buckets.on("end", () => {
-            core.debug(`Buckets end: ${findedItems}`);
+            (0, core_1.debug)(`Buckets end: ${findedItems}`);
             resolved = true;
             resolve(findedItems);
         });
@@ -46829,6 +46688,14 @@ module.exports = require("http");
 
 "use strict";
 module.exports = require("https");
+
+/***/ }),
+
+/***/ 9411:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:path");
 
 /***/ }),
 
@@ -46954,12 +46821,78 @@ module.exports = JSON.parse('{"name":"minio","version":"7.0.18","description":"S
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(5131);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+var exports = __webpack_exports__;
+
+/** @format */
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const cacheUtils_1 = __nccwpck_require__(1518);
+const tar_1 = __nccwpck_require__(6490);
+const core_1 = __nccwpck_require__(2186);
+const node_path_1 = __nccwpck_require__(9411);
+const utils_1 = __nccwpck_require__(1314);
+process.on("uncaughtException", (e) => (0, core_1.info)(`warning: ${e.message}`));
+async function saveCache() {
+    try {
+        const bucket = (0, core_1.getInput)("bucket", { required: true });
+        const key = (0, core_1.getInput)("key", { required: true });
+        const paths = (0, utils_1.getInputAsArray)("path");
+        (0, core_1.info)(`
+      saveCache
+
+      bucket = ${bucket}
+      key = ${key}
+      paths = ${paths}
+    `);
+        const isCacheHit = (0, utils_1.getCacheHitOutput)(key);
+        (0, core_1.info)(`isCacheHit ${isCacheHit}`);
+        if (isCacheHit) {
+            (0, core_1.info)(`Found cache hit for key ${key}, ignore uploading`);
+            // TODO: return
+        }
+        else {
+            (0, core_1.info)(`Cache not found for key ${key}, start uploading`);
+        }
+        try {
+            const mc = (0, utils_1.newMinio)();
+            const compressionMethod = await (0, cacheUtils_1.getCompressionMethod)();
+            (0, core_1.info)(`Compression method ${compressionMethod}`);
+            const cachePaths = await (0, cacheUtils_1.resolvePaths)(paths);
+            (0, core_1.info)(`Cache Paths: ${JSON.stringify(cachePaths)}`);
+            const archiveFolder = await (0, cacheUtils_1.createTempDirectory)();
+            (0, core_1.info)(`archiveFolder: ${archiveFolder}`);
+            const cacheFileName = (0, cacheUtils_1.getCacheFileName)(compressionMethod); // cache.tzst
+            (0, core_1.info)(`cacheFileName: ${cacheFileName}`);
+            const archivePath = (0, node_path_1.join)(archiveFolder, cacheFileName); // /Volumes/MacintoshHD2/actions-runner/_work/_temp/d251b5bc-37a0-44b0-8df1-ad374bb5440a/cache.tzst
+            (0, core_1.info)(`archivePath: ${archivePath}`);
+            await (0, tar_1.createTar)(archiveFolder, cachePaths, compressionMethod);
+            if ((0, core_1.isDebug)()) {
+                await (0, tar_1.listTar)(archivePath, compressionMethod);
+            }
+            const object = (0, node_path_1.join)(key, cacheFileName);
+            (0, core_1.info)(`Uploading tar to s3. Bucket: ${bucket}, Object: ${object}`);
+            await mc.fPutObject(bucket, object, archivePath, {});
+            (0, core_1.info)("Cache saved to s3 successfully");
+        }
+        catch (e) {
+            if (e instanceof Error) {
+                (0, core_1.info)(`Save s3 cache failed: ${e.message}`);
+            }
+        }
+    }
+    catch (e) {
+        if (e instanceof Error) {
+            (0, core_1.info)(`warning: ${e.message}`);
+        }
+    }
+}
+saveCache();
+
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;

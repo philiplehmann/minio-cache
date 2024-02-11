@@ -22,7 +22,7 @@ on:
 
 jobs:
   dependencies:
-    runs-on: [self-hosted]
+    runs-on: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v2
 
