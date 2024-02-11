@@ -88,13 +88,17 @@ export async function findObject(
 	debug(`fn ${cacheFileName}`);
 	debug(`Objects, ${JSON.stringify(objects, null, "  ")}`);
 	objects = objects.filter((o) => {
-		const isIncludes = o.name.includes(key);
+		const isIncludes = o.name?.includes(key) ?? false;
 		debug(`objects.filter ${o.name} includes ${key} ? = ${isIncludes}`);
 		return isIncludes;
 	});
 	info(`Found ${JSON.stringify(objects, null, 2)}`);
 	const sorted = objects.sort(
-		(a, b) => b.lastModified.getTime() - a.lastModified.getTime(),
+		(a, b) =>
+			(a.lastModified &&
+				b.lastModified &&
+				b.lastModified.getTime() - a.lastModified.getTime()) ||
+			0,
 	);
 	if (sorted.length > 0) {
 		info(`Using latest ${JSON.stringify(sorted[0])}`);

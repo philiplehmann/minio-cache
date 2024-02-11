@@ -38,7 +38,7 @@ async function restoreCache() {
 			info(
 				`Downloading cache from s3 to ${archivePath}. bucket: ${bucket}, object: ${obj.name}`,
 			);
-			await mc.fGetObject(bucket, obj.name, archivePath);
+			await mc.fGetObject(bucket, obj.name ?? "", archivePath);
 
 			if (isDebug()) {
 				await listTar(archivePath, compressionMethod);
