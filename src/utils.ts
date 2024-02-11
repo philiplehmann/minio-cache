@@ -4,13 +4,11 @@ import { getCacheFileName } from "@actions/cache/lib/internal/cacheUtils";
 import { CompressionMethod } from "@actions/cache/lib/internal/constants";
 import {
 	getInput,
-	setOutput,
-	saveState,
-	getState,
 	debug,
 	info,
 	error,
 	type InputOptions,
+	exportVariable,
 } from "@actions/core";
 import { Client, type BucketItem } from "minio";
 
@@ -66,14 +64,14 @@ export function formatSize(value?: number, format = "bi") {
 }
 
 export function setCacheHitOutput(key: string, isCacheHit: boolean): void {
-	setOutput("cache-hit", isCacheHit.toString());
+	debug(`cache-hit:  ${isCacheHit.toString()}`);
 	if (isCacheHit) {
-		saveState(`cache-hit-${key}`, isCacheHit);
+		exportVariable(`cache-hit-${key}`, isCacheHit);
 	}
 }
 
 export function getCacheHitOutput(key: string): boolean {
-	const state = getState(`cache-hit-${key}`);
+	const state = process.env[`cache-hit-${key}`];
 	debug(`state for key ${key} = ${state}`);
 	return !!(state === "true");
 }
