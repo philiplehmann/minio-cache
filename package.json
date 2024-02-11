@@ -2,7 +2,7 @@
   "name": "actions-cache",
   "license": "MIT",
   "main": "lib/restore.js",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "scripts": {
     "watch": "tsc --watch",
     "build": "tsc",

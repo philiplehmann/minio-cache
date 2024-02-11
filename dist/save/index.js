@@ -46564,14 +46564,14 @@ function formatSize(value, format = "bi") {
 }
 exports.formatSize = formatSize;
 function setCacheHitOutput(key, isCacheHit) {
-    (0, core_1.setOutput)("cache-hit", isCacheHit.toString());
+    (0, core_1.debug)(`cache-hit:  ${isCacheHit.toString()}`);
     if (isCacheHit) {
-        (0, core_1.saveState)(`cache-hit-${key}`, isCacheHit);
+        (0, core_1.exportVariable)(`cache-hit-${key}`, isCacheHit);
     }
 }
 exports.setCacheHitOutput = setCacheHitOutput;
 function getCacheHitOutput(key) {
-    const state = (0, core_1.getState)(`cache-hit-${key}`);
+    const state = process.env[`cache-hit-${key}`];
     (0, core_1.debug)(`state for key ${key} = ${state}`);
     return !!(state === "true");
 }
