@@ -15,9 +15,9 @@ name: yarn cache
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Restore yarn cache
         id: cache
-        uses: whalemare/minio-cache
+        uses: philiplehmann/minio-cache
         with:
           endpoint: "192.168.1.63" # optional, default s3.amazonaws.com
           port: 9000 # minio port
