@@ -1,17 +1,17 @@
 # @format
 
-name: master
+name: test
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   ezcache:
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: "0"
 
@@ -19,7 +19,7 @@ jobs:
         id: cache
         uses: ./
         with:
-          endpoint: "192.168.1.63" # optional, default s3.amazonaws.com
+          endpoint: "localhost" # optional, default s3.amazonaws.com
           port: 9000
           insecure: true # optional, use http instead of https. default false
           accessKey: "minioadmin" # required
@@ -36,4 +36,4 @@ jobs:
         run: yarn install
 
       - name: Check that dependency installed
-        run: yarn ts-jest -v
+        run: yarn vitest -v
