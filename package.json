@@ -11,12 +11,15 @@
     "format": "yarn biome format --write src/",
     "format-check": "yarn biome format src/",
     "lint": "yarn biome lint src/",
-    "package:restore": "esbuild src/restore.ts --bundle --platform=node --outfile=dist/restore.js",
-    "package:save": "esbuild src/save.ts --bundle --platform=node --outfile=dist/save.js",
+    "package:restore": "esbuild src/restore.ts --bundle --minify --platform=node --outfile=dist/restore.js",
+    "package:save": "esbuild src/save.ts --bundle --minify --platform=node --outfile=dist/save.js",
     "package": "yarn package:restore && yarn package:save",
     "test": "vitest",
-    "all": "yarn format && yarn build && yarn package",
-    "release": "yarn all && gh release create \"$(npm version patch --git-tag-version=false)\" -t Release -d=false -n \"\" -p=false && git add -A && git commit -m=\"Release\" && git push origin main && git push --tags"
+    "release:build": "yarn format && yarn build && yarn package",
+    "github:release": "gh release create \"$(npm version patch --git-tag-version=false)\" -t Release -d=false -n \"\" -p=false",
+    "git:commit": "git add -A && git commit -m \"Release\"",
+    "git:push": "git push origin main && git push --tags",
+    "release": "yarn release:build && yarn github:release && yarn git:commit && yarn git:push"
   },
   "repository": {
     "type": "git",
