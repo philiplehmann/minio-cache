@@ -2,7 +2,7 @@
   "name": "minio-cache",
   "description": "Github action to cache to S3",
   "license": "MIT",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "main": "dist/restore.js",
   "author": "Philip Lehmann",
   "scripts": {
