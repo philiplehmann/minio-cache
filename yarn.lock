@@ -2072,9 +2072,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minio-cache@workspace:.":
+"minio-cache-s3@workspace:.":
   version: 0.0.0-use.local
-  resolution: "minio-cache@workspace:."
+  resolution: "minio-cache-s3@workspace:."
   dependencies:
     "@actions/cache": "npm:^3.2.4"
     "@actions/core": "npm:^1.10.1"

@@ -1,4 +1,4 @@
-name: "S3 Cache"
+name: "S3 Cache - Minio"
 author: philiplehmann
 description: "write cache to s3 with minio js client"
 inputs:
