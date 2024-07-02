@@ -1,7 +1,7 @@
 /** @format */
 
 import { getCacheFileName } from "@actions/cache/lib/internal/cacheUtils";
-import { CompressionMethod } from "@actions/cache/lib/internal/constants";
+import type { CompressionMethod } from "@actions/cache/lib/internal/constants";
 import {
 	getInput,
 	debug,
@@ -43,7 +43,7 @@ export function getInputAsInt(
 	name: string,
 	options?: InputOptions,
 ): number | undefined {
-	const value = parseInt(getInput(name, options));
+	const value = Number.parseInt(getInput(name, options), 10);
 	if (Number.isNaN(value) || value < 0) {
 		return undefined;
 	}

@@ -1,6 +1,6 @@
-name: "Minio cache"
-author: proxyqb
-description: "S3 actions cache with actions/cache@v2 passthrough"
+name: "S3 Cache"
+author: philiplehmann
+description: "write cache to s3 with minio js client"
 inputs:
   endpoint:
     description: "s3 / minio endpoint, see: https://docs.min.io/docs/javascript-client-api-reference.html"
