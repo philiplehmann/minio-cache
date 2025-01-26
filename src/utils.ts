@@ -13,13 +13,15 @@ import {
 import { Client, type BucketItem } from "minio";
 
 export function newMinio() {
-	return new Client({
+	const config = {
 		endPoint: getInput("endpoint"),
 		port: getInputAsInt("port"),
 		useSSL: !getInputAsBoolean("insecure"),
 		accessKey: getInput("accessKey"),
 		secretKey: getInput("secretKey"),
-	});
+	};
+	info(`config: ${JSON.stringify(config)}`);
+	return new Client(config);
 }
 
 export function getInputAsBoolean(

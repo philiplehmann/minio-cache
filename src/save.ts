@@ -35,38 +35,45 @@ async function saveCache() {
 			info(`Cache not found for key ${key}, start uploading`);
 		}
 
-		try {
-			const mc = newMinio();
+		const mc = newMinio();
+		const compressionMethod = await getCompressionMethod();
+		info(`Compression method ${compressionMethod}`);
 
-			const compressionMethod = await getCompressionMethod();
-			info(`Compression method ${compressionMethod}`);
-			const cachePaths = await resolvePaths(paths);
-			info(`Cache Paths: ${JSON.stringify(cachePaths)}`);
+		await Promise.all(
+			paths.map(async (path) => {
+				try {
+					const cachePaths = await resolvePaths([path]);
+					info(`[${path}] Cache Path: ${cachePaths}`);
 
-			const archiveFolder = await createTempDirectory();
-			info(`archiveFolder: ${archiveFolder}`);
+					const archiveFolder = await createTempDirectory();
+					info(`[${path}] archiveFolder: ${archiveFolder}`);
 
-			const cacheFileName = getCacheFileName(compressionMethod); // cache.tzst
-			info(`cacheFileName: ${cacheFileName}`);
+					const cacheFileName = getCacheFileName(compressionMethod);
+					info(`[${path}] cacheFileName: ${cacheFileName}`);
 
-			const archivePath = join(archiveFolder, cacheFileName); // /Volumes/MacintoshHD2/actions-runner/_work/_temp/d251b5bc-37a0-44b0-8df1-ad374bb5440a/cache.tzst
-			info(`archivePath: ${archivePath}`);
+					const archivePath = join(archiveFolder, cacheFileName);
+					info(`[${path}] archivePath: ${archivePath}`);
 
-			await createTar(archiveFolder, cachePaths, compressionMethod);
-			if (isDebug()) {
-				await listTar(archivePath, compressionMethod);
-			}
+					await createTar(archiveFolder, cachePaths, compressionMethod);
+					if (isDebug()) {
+						await listTar(archivePath, compressionMethod);
+					}
 
-			const object = join(key, cacheFileName);
+					const object = join(key, path.replace(/\//g, "_"), cacheFileName);
 
-			info(`Uploading tar to s3. Bucket: ${bucket}, Object: ${object}`);
-			await mc.fPutObject(bucket, object, archivePath, {});
-			info("Cache saved to s3 successfully");
-		} catch (e: unknown) {
-			if (e instanceof Error) {
-				info(`Save s3 cache failed: ${e.message}`);
-			}
-		}
+					info(
+						`[${path}] Uploading tar to s3. Bucket: ${bucket}, Object: ${object}`,
+					);
+					await mc.fPutObject(bucket, object, archivePath, {});
+					info(`[${path}] Cache saved to s3 successfully for path ${path}`);
+				} catch (e: unknown) {
+					console.error(e);
+					if (e instanceof Error) {
+						info(`[${path}] Save s3 cache failed: ${e.message}`);
+					}
+				}
+			}),
+		);
 	} catch (e: unknown) {
 		if (e instanceof Error) {
 			info(`warning: ${e.message}`);
